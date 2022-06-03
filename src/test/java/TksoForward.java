@@ -147,7 +147,8 @@ public class TksoForward {
         if (mainYandexPage.size() != 1) {
             tabs = chromeSession.findElementsByXPath("//Pane/Tab/Pane/Pane/TabItem");
             for (i = 0; i <= tabs.size(); i++) {
-                tabs.get(i).click();     // Goto next page
+                chrAct.doubleClick(tabs.get(i)).build().perform();
+//                tabs.get(i).click();     // Goto next page
                 List<WebElement> yandexPage = chromeSession.findElementsByName("Главная страница Яндекс");
                 System.out.println("Tab# "+i+". Link to the Y main page "+yandexPage.size());
                 if (yandexPage.size() == 1) {     // YANDEX ?
