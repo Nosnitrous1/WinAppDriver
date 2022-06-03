@@ -1,9 +1,10 @@
 import io.appium.java_client.windows.WindowsDriver;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
+//import org.junit.jupiter.api.Test;
 import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
 import org.openqa.selenium.By;
-import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.remote.DesiredCapabilities;
@@ -12,6 +13,7 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.net.URL;
 import java.time.LocalDate;
+import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
 public class Excel {
@@ -19,7 +21,6 @@ public class Excel {
     public static WebDriverWait wait;
     Actions addAct = new Actions(exSession);
 //        builder.moveToElement(insights.get(1)).build().perform();
-
 
     public static String getDate() {
         LocalDate date = LocalDate.now();
@@ -43,56 +44,12 @@ public class Excel {
 
     @AfterClass
     public static void tearDown() {
-
-//        exSession.quit();
+        exSession.findElementByName("Закрыть").click();
+        exSession.findElementByName("Не сохранять").click();
     }
 
     @Test
-    public void checkExcelCells() throws InterruptedException {
-//        Thread.sleep(4000);
-        System.out.println("Before wait Пустая книга");
-        wait.until(ExpectedConditions.presenceOfElementLocated(By.className("NetUIListViewItem")));
-        System.out.println("Before Пустая книга");
-        exSession.findElementByClassName("NetUIListViewItem").click();
-        System.out.println("Before Заполнить яч A5");
-        exSession.findElementByAccessibilityId("A5").click();
-        exSession.findElementByAccessibilityId("FormulaBar").sendKeys("10");
-
-        System.out.println("Goto Caption");
-        exSession.findElementByClassName("NetUIOfficeCaption");
-
-//        exSession.findElementByAccessibilityId("B7").click();
-//        exSession.findElementByName("Вставка").click();           // function
-        exSession.findElementByAccessibilityId("A5").clear();
-        String resA5 = exSession.findElementByAccessibilityId("A5").getText().toString();
-        System.out.println("resA5=" + resA5);
-        resA5 = exSession.findElementByName(resA5).getText();
-        System.out.println("resA5=" + resA5);
-
-        WebElement elementFormulaBar = exSession.findElementByAccessibilityId("FormulaBar");
-        WebElement elementB7 = exSession.findElementByName("\"B\" 7");
-        addAct.doubleClick(elementB7).build().perform();
-        elementFormulaBar.click();
-        elementFormulaBar.sendKeys("20");
-
-        System.out.println("Goto B8");
-        WebElement elementB8 = exSession.findElementByName("\"B\" 8");
-        addAct.doubleClick(elementB8).build().perform();
-        elementFormulaBar.click();
-        elementFormulaBar.sendKeys("30");
-
-        String resB7 = exSession.findElementByAccessibilityId("FormulaBar").getText().toString();
-        System.out.println("resB7=" + resB7);
-        System.out.println("Before Заполнить яч B8");
-        exSession.findElementByAccessibilityId("B8").sendKeys("30");
-//        exSession.findElementByName("Положение").getTagName();
-//        exSession.findElementByClassName("NetUIListViewItem").click();
-//        System.out.println("Before A1");
-//        exSession.findElementByAccessibilityId("A1").sendKeys("A1" + Keys.TAB);
-    }
-
-    @Test
-    public void checkExcelSum() throws InterruptedException {
+     public void checkExcelSum() throws InterruptedException {
         Thread.sleep(1500);
         wait.until(ExpectedConditions.presenceOfElementLocated(By.className("NetUIListViewItem")));
         exSession.findElementByClassName("NetUIListViewItem").click();
@@ -104,6 +61,7 @@ public class Excel {
         enterSymbol("\"A\" 4", "40");
         enterSymbol("\"A\" 5", "50");
         String curSum = calcSum("\"A\" 6", "A1", "A5");
+        Assertions.assertEquals("150", curSum,"Incorrect sum");
     }
 
     public void enterSymbol(String name, String value) {
@@ -116,12 +74,11 @@ public class Excel {
     }
 
     public String calcSum(String name, String start, String finish) throws InterruptedException {
-        String summa = "0";
         WebElement elementFormulaBar = exSession.findElementByAccessibilityId("FormulaBar");
         WebElement sellName = exSession.findElementByName(name);
         addAct.doubleClick(sellName).build().perform();
         elementFormulaBar.click();
-        System.out.println("Before inpet sum formula");
+        System.out.println("Before input sum formula");
 
         exSession.findElementByName("Сумма").click();
         Thread.sleep(500);
@@ -131,47 +88,16 @@ public class Excel {
 
         exSession.findElementByName("Лист1").click();
         elementFormulaBar.click();
-        System.out.println("Print.Print");
-        System.out.println("A6="+exSession.findElementByAccessibilityId("A6").getAttribute("Value"));
-
-//        addAct.doubleClick(exSession.findElementByName("\"A\" 8")).build().perform();
-//        addAct.doubleClick(exSession.findElementByName("\"A\" 6")).build().perform();
-
-//        elementFormulaBar.sendKeys("=СУММ(");
-//        elementFormulaBar.sendKeys(Keys.END+"=СУММ("+start+":"+finish+")");
-//        elementFormulaBar.sendKeys(Keys.ENTER);
-//        exSession.findElementByName("Сумма").click();
-//        Thread.sleep(500);
-//        exSession.findElementByName("Сумма").click();
-//        elementFormulaBar.click();
-//        exSession.findElementByName("UiTask").click();
-
-//        exSession.findElementByName("Лист1").click();
-//        System.out.println("Before press END + Enter");
-//        elementFormulaBar.sendKeys(Keys.END);
-//        elementFormulaBar.sendKeys(Keys.ENTER);
+//        System.out.println("LegacyValue = "+exSession.findElementByName("\"A\" 6")
+//                .getAttribute("LegacyValue"));
 //
-//        System.out.println("Goto A1");
-//        addAct.doubleClick(exSession.findElementByName(start)).build().perform();
-//        elementFormulaBar.click();
-//        addAct.doubleClick(exSession.findElementByName(finish)).build().perform();
-//        elementFormulaBar.click();
-//        addAct.doubleClick(sellName).build().perform();
-//        System.out.println("Goto "+sellName);
-//        addAct.doubleClick(sellName).build().perform();
-//        elementFormulaBar.click();
-//        System.out.println("Befor ENTER in FormulaBar");
-//        elementFormulaBar.sendKeys(Keys.ENTER);
-//        System.out.println("To read a sum");
-//        summa = exSession.findElementByName("\"A\" 6").getAttribute("LegacyValue.Value").toString(); //getText();
-        summa = exSession.findElementByName("\"A\" 6").getText(); //getText();
-        System.out.println(summa + " was getText calculated in sell " + name);
-//        summa = elementFormulaBar.getAttribute("LegacyAccessible.Value");
-        summa = elementFormulaBar.getText();
-        System.out.println(summa + " get in sell formulaBar");
-//        summa = exSession.findElementByName("\"A\" 5").getAttribute("LegacyValue").toString(); // getAttribute("Value.Value"); // getAttribute("LegacyAccessible.Value");  // getText();
-        summa = exSession.findElementByName("\"A\" 5").getText(); // getAttribute("Value.Value"); // getAttribute("LegacyAccessible.Value");  // getText();
-        System.out.println(summa + " was obtained from sell A5");
+//        System.out.println("Value.Value = "+exSession.findElementByName("\"A\" 6")
+//                .getAttribute("Value.Value"));
+        System.out.println("******************");
+        String summa = exSession.findElementByName(name).getText();
+//        System.out.println(summa + " was getText calculated in sell " + name);
+//        summa = elementFormulaBar.getText();
+//        System.out.println(summa + " get in sell formulaBar");
         return summa;
     }
 

@@ -7,6 +7,7 @@ import org.junit.jupiter.api.Assertions;
 import org.openqa.selenium.By;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.remote.DesiredCapabilities;
 import org.openqa.selenium.support.ui.ExpectedCondition;
 import org.openqa.selenium.support.ui.ExpectedConditions;
@@ -25,6 +26,7 @@ public class NotepadeTest {
 
     public static WindowsDriver notepadSession = null;
     public static WebDriverWait wait;
+    Actions addAct = new Actions(notepadSession);
 
     public static String getDate() {
         LocalDate date = LocalDate.now();
@@ -56,7 +58,7 @@ public class NotepadeTest {
     @AfterClass
     public static void tearDown() {
 
-//        notepadSession.quit();
+        notepadSession.quit();
     }
 
     @Test
@@ -66,7 +68,7 @@ public class NotepadeTest {
         wait.until(ExpectedConditions.elementToBeClickable(By.name("Приложение"))); // presenceOfElementLocated(MobileBy.name("Приложение")));
         System.out.println("Before Help");
         List<WebElement> menuItems = notepadSession.findElementsByName("Приложение"); // sendKeys(Keys.ENTER);
-        System.out.println("Before vlick");
+        System.out.println("Before click");
         for (WebElement curItem : menuItems) {
             System.out.println("Current El=" + curItem.toString());
             curItem.click();
@@ -120,22 +122,29 @@ public class NotepadeTest {
         System.out.println("Before Wait ...");
         wait.until(ExpectedConditions.presenceOfElementLocated(By.className("Edit")));
         System.out.println("Before Sending Date");
-        notepadSession.findElementByClassName("Edit").sendKeys(getDate());
+        notepadSession.findElementByClassName("Edit").sendKeys(getDate() + "\nHello\nHello\nHello");
 
-        System.out.println("inputed: "+getDate());
-        System.out.println("1. getText() " + notepadSession.findElementByClassName("Edit").getText().toString());
+        System.out.println("inputed: " + getDate());
+        System.out.println("1. getText() " + notepadSession.findElementByClassName("Edit").getText());
         System.out.println("2. LegacyValue.Value " + notepadSession.findElementByClassName("Edit").
                 getAttribute("LegacyValue"));
-        System.out.println("3. Value " + notepadSession.findElementByClassName("Edit").getAttribute("Value"));
+        System.out.println("3. LegacyValue " + notepadSession.findElementByAccessibilityId("15")
+                .getAttribute("LegacyValue"));
+        System.out.println("4. LegacyIAccessible.Value " + notepadSession.findElementByAccessibilityId("15").getAttribute("LegacyIAccessible.Value"));
+        System.out.println("5. NativeWindowHandle " + notepadSession.findElementByAccessibilityId("15").getAttribute("NativeWindowHandle"));
+        System.out.println("6. Value.Value " + notepadSession.findElementByAccessibilityId("15")
+                .getAttribute("Value.Value"));
+        System.out.println("7. Value.Value= " + notepadSession.findElementByAccessibilityId("15").getAttribute("Value.Value"));
 
-//        System.out.println("Before wait of Cleaning");
-//        wait.until(ExpectedConditions.presenceOfElementLocated(By.className("Edit")));
-//        System.out.println("Before cleaning");
-//        notepadSession.findElementByName("Текстовый редактор").clear();
-//        System.out.println("2-d cleaning");
-//        notepadSession.findElementByClassName("Edit").clear();
 
-                System.out.println("Before wait of close");
+        System.out.println("Before wait of Cleaning");
+        wait.until(ExpectedConditions.presenceOfElementLocated(By.className("Edit")));
+        System.out.println("Before cleaning");
+        notepadSession.findElementByName("Текстовый редактор").clear();
+        System.out.println("2-d cleaning");
+        notepadSession.findElementByClassName("Edit").clear();
+
+        System.out.println("Before wait of close");
         wait.until(ExpectedConditions.presenceOfElementLocated(By.name("Закрыть")));
         System.out.println("Before close");
         notepadSession.findElementByName("Закрыть").click();    // .sendKeys(Keys.ENTER);
@@ -143,7 +152,7 @@ public class NotepadeTest {
         System.out.println("Before wait saving/not saving");
         wait.until(ExpectedConditions.presenceOfElementLocated(By.name("Не сохранять")));
         System.out.println("Before saving/not saving");
-        notepadSession.findElementByName("Не сохранять").click();
+//        notepadSession.findElementByName("Не сохранять").click();
     }
 
     @Test

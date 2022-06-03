@@ -1,4 +1,3 @@
-import io.appium.java_client.MobileBy;
 import io.appium.java_client.windows.WindowsDriver;
 import io.appium.java_client.windows.WindowsElement;
 import org.junit.AfterClass;
@@ -6,8 +5,6 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.jupiter.api.Assertions;
 import org.openqa.selenium.By;
-import org.openqa.selenium.Keys;
-import org.openqa.selenium.WebElement;
 import org.openqa.selenium.remote.DesiredCapabilities;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
@@ -19,7 +16,7 @@ import java.util.concurrent.TimeUnit;
 public class CalcTest {
 
     public static WindowsDriver calcSession = null;
-    public static WebDriverWait wait;
+    public static WebDriverWait waitCalc;
 
     public static String getDate() {
         LocalDate date = LocalDate.now();
@@ -33,9 +30,10 @@ public class CalcTest {
             capabilities.setCapability("app", "Microsoft.WindowsCalculator_8wekyb3d8bbwe!App");
             capabilities.setCapability("platformName", "Windows");
             capabilities.setCapability("deviceName", "WindowsPC");
-            calcSession = new WindowsDriver(new URL("http://127.0.0.1:4723"), capabilities);
+//            calcSession = new WindowsDriver(new URL("http://127.0.0.1:4723"), capabilities);
+            calcSession = new WindowsDriver(new URL("http://192.168.10.72:4723/wd/hub"), capabilities);
             calcSession.manage().timeouts().implicitlyWait(2, TimeUnit.SECONDS);
-            wait = new WebDriverWait(calcSession, 3);
+            waitCalc = new WebDriverWait(calcSession, 3);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -62,27 +60,27 @@ public class CalcTest {
 //        calcSession.findElementByName("One").click();
 
         System.out.println("Before wait Two");
-        wait.until(ExpectedConditions.presenceOfElementLocated(By.name("Two")));
+        waitCalc.until(ExpectedConditions.presenceOfElementLocated(By.name("Two")));
         WindowsElement varTwo = (WindowsElement) calcSession.findElementByName("Two");
         System.out.println("Twice TWO");
         ((WindowsElement) varTwo).click();
 
         System.out.println("Before wait PLUS");
-        wait.until(ExpectedConditions.presenceOfElementLocated(By.name("Plus")));
+        waitCalc.until(ExpectedConditions.presenceOfElementLocated(By.name("Plus")));
         System.out.println("PLUS");
         calcSession.findElementByName("Plus").click();
 
         ((WindowsElement) varTwo).click();
 
         System.out.println("Before wait PLUS");
-        wait.until(ExpectedConditions.presenceOfElementLocated(By.name("Plus")));
+        waitCalc.until(ExpectedConditions.presenceOfElementLocated(By.name("Plus")));
         System.out.println("PLUS");
         calcSession.findElementByName("Plus").click();
 
         ((WindowsElement) varTwo).click();
 
         System.out.println("Before wait EQUALS");
-        wait.until(ExpectedConditions.presenceOfElementLocated(By.name("Equals")));
+        waitCalc.until(ExpectedConditions.presenceOfElementLocated(By.name("Equals")));
         System.out.println("EQUALS");
         calcSession.findElementByName("Equals").click();
 
