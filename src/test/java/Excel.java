@@ -1,9 +1,8 @@
 import io.appium.java_client.windows.WindowsDriver;
-import org.junit.AfterClass;
-import org.junit.BeforeClass;
-//import org.junit.jupiter.api.Test;
-import org.junit.Test;
+import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
@@ -27,7 +26,9 @@ public class Excel {
         return date.toString();
     }
 
-    @BeforeClass
+
+
+    @BeforeAll
     public static void setUp() {
         try {
             DesiredCapabilities capabilities = new DesiredCapabilities();
@@ -42,7 +43,7 @@ public class Excel {
         }
     }
 
-    @AfterClass
+    @AfterAll
     public static void tearDown() {
         exSession.findElementByName("Закрыть").click();
         exSession.findElementByName("Не сохранять").click();
@@ -50,17 +51,18 @@ public class Excel {
 
     @Test
      public void checkExcelSum() throws InterruptedException {
-        Thread.sleep(1500);
+        Thread.sleep(3500);
         wait.until(ExpectedConditions.presenceOfElementLocated(By.className("NetUIListViewItem")));
         exSession.findElementByClassName("NetUIListViewItem").click();
+        System.out.println("Before Entering Data");
+        Thread.sleep(3500);
 
-
-        enterSymbol("\"A\" 1", "10");
-        enterSymbol("\"A\" 2", "20");
-        enterSymbol("\"A\" 3", "30");
-        enterSymbol("\"A\" 4", "40");
-        enterSymbol("\"A\" 5", "50");
-        String curSum = calcSum("\"A\" 6", "A1", "A5");
+        enterSymbol("A1", "10");
+        enterSymbol("A2", "20");
+        enterSymbol("A3", "30");
+        enterSymbol("A4", "40");
+        enterSymbol("A5", "50");
+        String curSum = calcSum("A6", "A1", "A5");
         Assertions.assertEquals("150", curSum,"Incorrect sum");
     }
 
@@ -81,9 +83,9 @@ public class Excel {
         System.out.println("Before input sum formula");
 
         exSession.findElementByName("Сумма").click();
-        Thread.sleep(500);
+        Thread.sleep(1000);
         exSession.findElementByName("Сумма").click();
-        Thread.sleep(500);
+        Thread.sleep(1000);
         exSession.findElementByName("Сумма").click();
 
         exSession.findElementByName("Лист1").click();

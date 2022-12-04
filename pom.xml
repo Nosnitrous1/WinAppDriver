@@ -7,20 +7,20 @@
     <groupId>org.example</groupId>
     <artifactId>WinAppDriver</artifactId>
     <version>1.0-SNAPSHOT</version>
-    <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-shade-plugin</artifactId>
-        <version>2.3</version>
-        <executions>
-            <!-- Run shade goal on package phase -->
-            <execution>
-                <phase>package</phase>
-                <goals>
-                    <goal>checkExcelSum</goal>
-                </goals>
-            </execution>
-        </executions>
-    </plugin>
+<!--    <plugin>-->
+<!--        <groupId>org.apache.maven.plugins</groupId>-->
+<!--        <artifactId>maven-shade-plugin</artifactId>-->
+<!--        <version>2.3</version>-->
+<!--        <executions>-->
+<!--            &lt;!&ndash; Run shade goal on package phase &ndash;&gt;-->
+<!--            <execution>-->
+<!--                <phase>package</phase>-->
+<!--                <goals>-->
+<!--                    <goal>checkExcelSum</goal>-->
+<!--                </goals>-->
+<!--            </execution>-->
+<!--        </executions>-->
+<!--    </plugin>-->
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven.compiler.source>8</maven.compiler.source>
@@ -55,12 +55,12 @@
         <scope>test</scope>
     </dependency>
     <!-- https://mvnrepository.com/artifact/org.junit.vintage/junit-vintage-engine -->
-    <dependency>
-        <groupId>org.junit.vintage</groupId>
-        <artifactId>junit-vintage-engine</artifactId>
-        <version>5.8.2</version>
-        <scope>test</scope>
-    </dependency>
+<!--    <dependency>-->
+<!--        <groupId>org.junit.vintage</groupId>-->
+<!--        <artifactId>junit-vintage-engine</artifactId>-->
+<!--        <version>5.8.2</version>-->
+<!--        <scope>test</scope>-->
+<!--    </dependency>-->
     <!-- https://mvnrepository.com/artifact/org.junit.platform/junit-platform-launcher -->
     <dependency>
         <groupId>org.junit.platform</groupId>

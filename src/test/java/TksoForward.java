@@ -1,7 +1,9 @@
 import io.appium.java_client.windows.WindowsDriver;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
-import org.junit.Test;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
@@ -30,7 +32,7 @@ public class TksoForward {
         return date.toString();
     }
 
-    @BeforeClass
+    @BeforeAll
     public static void setUp() {
         try {
             DesiredCapabilities capabilities = new DesiredCapabilities();
@@ -53,7 +55,7 @@ public class TksoForward {
 //        setUp();
 //    }
 
-    @AfterClass
+    @AfterAll
     public static void tearDown() {
 
 //        chromeSession.quit();
@@ -89,6 +91,9 @@ public class TksoForward {
         adrSearch.sendKeys("http://yandex.ru" + Keys.ENTER);
         chromeSession.findElementByName("Запрос").sendKeys("Ситуация на Украине" + Keys.ENTER);
         WebElement findInYandex = chromeSession.findElementByName("Запрос");
+        // Close the ZEN tab
+        tabsFin = chromeSession.findElementsByXPath("//Pane/Tab/Pane/Pane/TabItem/Button[@Name='Закрыть']");
+        tabsFin.get(2).click();     // Закрыть все лишние закладки (если есть)
 
         tabs = chromeSession.findElementsByXPath("//Pane/Tab/Pane/Pane/TabItem");
         tabs.get(0).click();    // TKSO
@@ -102,10 +107,12 @@ public class TksoForward {
 
             System.out.println("curArt.value:" + curArt.getAttribute("Value.Value") + "\n"
                     + "curArt.text:" + curArt.getText());
-            tabs.get(1).click();    // GOOGLE
-            findGoogle(String.valueOf(curArt.getText()), "tkso.ru", 3, 9);
-            tabs.get(tabY).click();    // YANDEX
-            findYandex(String.valueOf(curArt.getText()), "tkso.ru", 4, 9);
+            chrAct.doubleClick(tabs.get(1)).build().perform();
+//            tabs.get(1).click();    // GOOGLE
+            findGoogle(String.valueOf(curArt.getText()), "tkso.ru", 3, 8);
+            chrAct.doubleClick(tabs.get(tabY)).build().perform();
+//            tabs.get(tabY).click();    // YANDEX
+            findYandex(String.valueOf(curArt.getText()), "tkso.ru", 4, 7);
 
         }
     }
@@ -164,15 +171,11 @@ public class TksoForward {
             chromeSession.findElementByName("\"Я не робот\"").click();
         }
 
-        System.out.println("Before Перезагрузить");
         chrAct.doubleClick(chromeSession.findElementByName("Перезагрузить")).build().perform();
-        System.out.println("After Перезагрузить");
         Thread.sleep(5000);
         WebElement findAny = chromeSession.findElementByName("Запрос");
 
-        System.out.println("Before findAny.clear");
         findAny.clear();
-        System.out.println("After findAny.clear");
         findAny.sendKeys(Keys.CONTROL + "a");       // Delete every request
         findAny.sendKeys(Keys.DELETE);
         // curArt.getText().substring(0, curArt.getText().indexOf("  "))
