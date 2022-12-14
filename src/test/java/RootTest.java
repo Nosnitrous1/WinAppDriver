@@ -1,8 +1,10 @@
-import com.sun.applet2.Applet2;
+//import com.sun.applet2.Applet2;
 import io.appium.java_client.windows.WindowsDriver;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
-import org.junit.Test;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
 import org.openqa.selenium.By;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebElement;
@@ -35,7 +37,7 @@ public class RootTest {
         return date.toString();
     }
 
-    @BeforeClass
+    @BeforeAll
     public static void setUp() {
         try {
             DesiredCapabilities capa = new DesiredCapabilities();
@@ -52,7 +54,7 @@ public class RootTest {
         }
     }
 
-    @AfterClass
+    @AfterAll
     public static void tearDown() {
         allSession.quit();
     }

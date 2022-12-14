@@ -1,21 +1,28 @@
 import io.appium.java_client.windows.WindowsDriver;
-import org.junit.AfterClass;
-import org.junit.BeforeClass;
+import org.apache.commons.io.FileUtils;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.Keys;
+import org.openqa.selenium.OutputType;
+import org.openqa.selenium.TakesScreenshot;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.remote.DesiredCapabilities;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
+import java.io.File;
+import java.io.IOException;
 import java.net.URL;
+import java.text.SimpleDateFormat;
 import java.time.LocalDate;
+import java.util.Date;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
-import static jdk.nashorn.internal.objects.NativeString.trim;
+import static org.apache.commons.lang3.StringUtils.trim;
+
+//import static jdk.nashorn.internal.objects.NativeString.trim;
 
 public class TksoForward {
     public static WindowsDriver chromeSession = null;
@@ -73,9 +80,8 @@ public class TksoForward {
 
         adrSearch = chromeSession.findElementByName("Адресная строка и строка поиска");
         adrSearch.clear();
-
-        adrSearch.sendKeys("http://tkso.ru/index.php?limitstart=" + Integer.toString((int) Math.ceil(Math.random() * 661 + 11))
-                + Keys.ENTER);
+        String curTKSOPageNum = Integer.toString((int) Math.ceil(Math.random() * 661 + 11));
+        adrSearch.sendKeys("http://tkso.ru/index.php?limitstart=" + curTKSOPageNum + Keys.ENTER);
 
 //        adrSearch.sendKeys("http://tkso.ru" + Keys.ENTER);
 //        Thread.sleep(2000);
@@ -99,6 +105,8 @@ public class TksoForward {
         tabs.get(0).click();    // TKSO
         List<WebElement> articles = chromeSession.findElementsByXPath("//Document[@ClassName='Chrome_RenderWidgetHostHWND']/Document");
         System.out.println("NumOfArticles: " + articles.size() + ":" + articles.toString() + "\n-----------------");
+//        Thread.sleep(7000);
+        makeScreenshot("tkso" + "_" + curTKSOPageNum+"_");
 
         for (WebElement curArt : articles) {
 //            chrAct.doubleClick(chromeSession.findElementByName("Перезагрузить")).build().perform();
@@ -157,10 +165,11 @@ public class TksoForward {
                 chrAct.doubleClick(tabs.get(i)).build().perform();
 //                tabs.get(i).click();     // Goto next page
                 List<WebElement> yandexPage = chromeSession.findElementsByName("Главная страница Яндекс");
-                System.out.println("Tab# "+i+". Link to the Y main page "+yandexPage.size());
+                System.out.println("Tab# " + i + ". Link to the Y main page " + yandexPage.size());
                 if (yandexPage.size() == 1) {     // YANDEX ?
                     tabY = i;
-                    break; }
+                    break;
+                }
             }
         }
 
@@ -208,5 +217,18 @@ public class TksoForward {
             if (i > NofW) break;
         }
         return trim(retVal); // —
+    }
+
+    private void makeScreenshot(String testName) {
+        SimpleDateFormat ft = new SimpleDateFormat("dd.MM.yy");
+        String sDate = ft.format(new Date());
+        try {
+            File screenshot = ((TakesScreenshot) chromeSession)
+                    .getScreenshotAs(OutputType.FILE);
+            FileUtils.copyFile(screenshot, new File("screenShots\\screenShot_" + testName + sDate + ".png"));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+//        return screenshotBytes;
     }
 }

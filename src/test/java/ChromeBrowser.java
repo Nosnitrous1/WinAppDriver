@@ -14,7 +14,9 @@ import java.util.List;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
-import static jdk.nashorn.internal.objects.NativeString.trim;
+import static org.apache.commons.lang3.StringUtils.trim;
+
+//import static jdk.nashorn.internal.objects.NativeString.trim;
 
 public class ChromeBrowser {
     public static WindowsDriver chromeSession = null;

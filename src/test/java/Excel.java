@@ -1,32 +1,34 @@
 import io.appium.java_client.windows.WindowsDriver;
+import org.apache.commons.io.FileUtils;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.By;
+import org.openqa.selenium.OutputType;
+import org.openqa.selenium.TakesScreenshot;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.remote.DesiredCapabilities;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
+import java.io.File;
+import java.io.IOException;
 import java.net.URL;
-import java.time.LocalDate;
-import java.util.Set;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.concurrent.TimeUnit;
 
+//@ExtendWith(SerenityJUnit5Extension.class)
+//@ExtendWith(SerenityRunner.class)
+//@net.serenitybdd.junit5.SerenityTest
+//@ExtendWith(SerenityJUnit5Extension.class)     //   SerenityRunner::class)
 public class Excel {
     public static WindowsDriver exSession = null;
     public static WebDriverWait wait;
     Actions addAct = new Actions(exSession);
 //        builder.moveToElement(insights.get(1)).build().perform();
-
-    public static String getDate() {
-        LocalDate date = LocalDate.now();
-        return date.toString();
-    }
-
-
 
     @BeforeAll
     public static void setUp() {
@@ -64,6 +66,7 @@ public class Excel {
         enterSymbol("A5", "50");
         String curSum = calcSum("A6", "A1", "A5");
         Assertions.assertEquals("150", curSum,"Incorrect sum");
+        makeScreenshot("Excel");
     }
 
     public void enterSymbol(String name, String value) {
@@ -101,6 +104,17 @@ public class Excel {
 //        summa = elementFormulaBar.getText();
 //        System.out.println(summa + " get in sell formulaBar");
         return summa;
+    }
+    private void makeScreenshot(String testName) {
+        SimpleDateFormat ft = new SimpleDateFormat("dd.MM.yy");
+        String sDate = ft.format(new Date());
+        try {
+            File screenshot = ((TakesScreenshot) exSession)
+                    .getScreenshotAs(OutputType.FILE);
+            FileUtils.copyFile(screenshot, new File("screenShots\\screenShot_" + testName + sDate + ".png"));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
 }
