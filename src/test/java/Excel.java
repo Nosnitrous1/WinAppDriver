@@ -66,7 +66,7 @@ public class Excel {
         enterSymbol("A5", "50");
         String curSum = calcSum("A6", "A1", "A5");
         Assertions.assertEquals("150", curSum,"Incorrect sum");
-        makeScreenshot("Excel");
+        makeScreenshot("Excel_");
     }
 
     public void enterSymbol(String name, String value) {
