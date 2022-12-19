@@ -1,9 +1,7 @@
 import io.appium.java_client.windows.WindowsDriver;
+import io.qameta.allure.*;
 import org.apache.commons.io.FileUtils;
-import org.junit.jupiter.api.AfterAll;
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 import org.openqa.selenium.By;
 import org.openqa.selenium.OutputType;
 import org.openqa.selenium.TakesScreenshot;
@@ -52,7 +50,13 @@ public class Excel {
     }
 
     @Test
-     public void checkExcelSum() throws InterruptedException {
+    @DisplayName("Excel test. Calculation test")
+    @Description("Проверка помещения слогаемых в ячейки и суммирование их")
+    @Severity(SeverityLevel.CRITICAL)
+    @Epic("Desktop testing by WAD")
+    @Feature("Excel testing")
+    @Story("Суммирование в EXCEL")
+    public void checkExcelSum() throws InterruptedException {
         Thread.sleep(3500);
         wait.until(ExpectedConditions.presenceOfElementLocated(By.className("NetUIListViewItem")));
         exSession.findElementByClassName("NetUIListViewItem").click();
@@ -60,15 +64,22 @@ public class Excel {
         Thread.sleep(3500);
 
         enterSymbol("A1", "10");
+//        byte[] scrsht1 = allureScreenshot("После заполнения 1-й ячейки");      //
         enterSymbol("A2", "20");
+//        byte[] scrsht2 = allureScreenshot("После заполнения 2-й ячейки");      //
         enterSymbol("A3", "30");
+//        byte[] scrsht3 = allureScreenshot("После заполнения 3-й ячейки");      //
         enterSymbol("A4", "40");
+//        byte[] scrsht4 = allureScreenshot("После заполнения 4-й ячейки");      //
         enterSymbol("A5", "50");
+//        byte[] scrsht5 = allureScreenshot("После заполнения 5-й ячейки");      //
         String curSum = calcSum("A6", "A1", "A5");
-        Assertions.assertEquals("150", curSum,"Incorrect sum");
+        Assertions.assertEquals("150", curSum, "Incorrect sum");
+        byte[] scrsht = allureScreenshot("Фотка страницы результата");      //
         makeScreenshot("Excel_");
     }
 
+    @Step("Поместить {value} в ячейку {name}")
     public void enterSymbol(String name, String value) {
         WebElement elementFormulaBar = exSession.findElementByAccessibilityId("FormulaBar");
         WebElement sellName = exSession.findElementByName(name);
@@ -78,6 +89,7 @@ public class Excel {
         System.out.println(value + " was inserted to sell " + name);
     }
 
+    @Step("Расчитать сумму от {start} до {finish}, сумма = {summa}")
     public String calcSum(String name, String start, String finish) throws InterruptedException {
         WebElement elementFormulaBar = exSession.findElementByAccessibilityId("FormulaBar");
         WebElement sellName = exSession.findElementByName(name);
@@ -105,16 +117,24 @@ public class Excel {
 //        System.out.println(summa + " get in sell formulaBar");
         return summa;
     }
+
     private void makeScreenshot(String testName) {
         SimpleDateFormat ft = new SimpleDateFormat("dd.MM.yy");
         String sDate = ft.format(new Date());
         try {
-            File screenshot = ((TakesScreenshot) exSession)
-                    .getScreenshotAs(OutputType.FILE);
+            File screenshot = ((TakesScreenshot) exSession).getScreenshotAs(OutputType.FILE);
             FileUtils.copyFile(screenshot, new File("screenShots\\screenShot_" + testName + sDate + ".png"));
+//            Allure.addAttachment("My attachment", screenshot.toString());
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
+
+    @SuppressWarnings("UnusedReturnValue")
+    @Attachment(value = "{name}", type = "image/png", fileExtension = ".png")
+    public byte[] allureScreenshot(String name) {
+        return ((TakesScreenshot) exSession).getScreenshotAs(OutputType.BYTES);
+    }
+
 
 }
