@@ -26,7 +26,7 @@ public class Excel {
     public static WindowsDriver exSession = null;
     public static WebDriverWait wait;
     Actions addAct = new Actions(exSession);
-//        builder.moveToElement(insights.get(1)).build().perform();
+    public String stepNumStr = "1";     // Step Number
 
     @BeforeAll
     public static void setUp() {
@@ -63,24 +63,25 @@ public class Excel {
         System.out.println("Before Entering Data");
         Thread.sleep(3500);
 
-        enterSymbol("A1", "10");
-//        byte[] scrsht1 = allureScreenshot("После заполнения 1-й ячейки");      //
-        enterSymbol("A2", "20");
-//        byte[] scrsht2 = allureScreenshot("После заполнения 2-й ячейки");      //
-        enterSymbol("A3", "30");
-//        byte[] scrsht3 = allureScreenshot("После заполнения 3-й ячейки");      //
-        enterSymbol("A4", "40");
-//        byte[] scrsht4 = allureScreenshot("После заполнения 4-й ячейки");      //
-        enterSymbol("A5", "50");
-//        byte[] scrsht5 = allureScreenshot("После заполнения 5-й ячейки");      //
-        String curSum = calcSum("A6", "A1", "A5");
+        enterSymbol("A1", "10", stepNumStr);
+        byte[] scrsht1 = allureScreenshot("После заполнения 1-й ячейки");      //
+        enterSymbol("A2", "20", stepNumStr);
+        byte[] scrsht2 = allureScreenshot("После заполнения 2-й ячейки");      //
+        enterSymbol("A3", "30", stepNumStr);
+        byte[] scrsht3 = allureScreenshot("После заполнения 3-й ячейки");      //
+        enterSymbol("A4", "40", stepNumStr);
+        byte[] scrsht4 = allureScreenshot("После заполнения 4-й ячейки");      //
+        enterSymbol("A5", "50", stepNumStr);
+        byte[] scrsht5 = allureScreenshot("После заполнения 5-й ячейки");      //
+        String curSum = calcSum("A6", "A1", "A5", stepNumStr);
         Assertions.assertEquals("150", curSum, "Incorrect sum");
         byte[] scrsht = allureScreenshot("Фотка страницы результата");      //
         makeScreenshot("Excel_");
     }
 
-    @Step("Поместить {value} в ячейку {name}")
-    public void enterSymbol(String name, String value) {
+    @Step("{stepN}. Поместить {value} в ячейку {name}")
+    public void enterSymbol(String name, String value, String stepN) {
+        stepNumStr = String.valueOf(Integer.parseInt(stepNumStr) + 1);
         WebElement elementFormulaBar = exSession.findElementByAccessibilityId("FormulaBar");
         WebElement sellName = exSession.findElementByName(name);
         addAct.doubleClick(sellName).build().perform();
@@ -89,8 +90,9 @@ public class Excel {
         System.out.println(value + " was inserted to sell " + name);
     }
 
-    @Step("Расчитать сумму от {start} до {finish}, сумма = {summa}")
-    public String calcSum(String name, String start, String finish) throws InterruptedException {
+    @Step("{stepN}. Расчитать сумму от {start} до {finish}, сумма = {summa}")
+    public String calcSum(String name, String start, String finish, String stepN) throws InterruptedException {
+        stepNumStr = String.valueOf(Integer.parseInt(stepNumStr) + 1);
         WebElement elementFormulaBar = exSession.findElementByAccessibilityId("FormulaBar");
         WebElement sellName = exSession.findElementByName(name);
         addAct.doubleClick(sellName).build().perform();
