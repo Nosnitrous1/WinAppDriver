@@ -118,7 +118,9 @@ public class TksoForward {
         System.out.println("NumOfArticles: " + articles.size() + ":" + articles.toString() + "\n-----------------");
 //        Thread.sleep(7000);
         byte[] scrSht = allureScreenshot("Фотка страницы tkso.ru");      //
-        makeScreenshot("tkso" + "_" + curTKSOPageNum + "_");
+        if (runningFromIntelliJ()) {
+            makeScreenshot("tkso" + "_" + curTKSOPageNum + "_");
+        }
 
         for (WebElement curArt : articles) {
 //            chrAct.doubleClick(chromeSession.findElementByName("Перезагрузить")).build().perform();
@@ -162,7 +164,9 @@ public class TksoForward {
                 Thread.sleep(7000);
 //                callMySite("Google");
                 byte[] scrShtG = allureScreenshot("Call from Google");
-                makeScreenshot("tkso_Google_" + substring(replace(textSearch, '"', '_'), 0, 6) + "_");
+                if (runningFromIntelliJ()) {
+                    makeScreenshot("tkso_Google_" + substring(replace(textSearch, '"', '_'), 0, 6) + "_");
+                }
                 tabs.get(1).click();    // GOOGLE                makeScreenshot("tkso_Google_" + i + "_");
 
                 fin = true;
@@ -221,7 +225,9 @@ public class TksoForward {
                 Thread.sleep(7000);
 //                callMySite("Yandex");
                 byte[] scrShtY = allureScreenshot("Call from Google");
-                makeScreenshot("tkso_Yandex_" + substring(replace(textSearch, '"', '_'), 0, 6) + "_");
+                if (runningFromIntelliJ()) {
+                    makeScreenshot("tkso_Yandex_" + substring(replace(textSearch, '"', '_'), 0, 6) + "_");
+                }
                 tabs.get(2).click();    // YANDEX
                 fin = true;
                 break;
@@ -246,16 +252,22 @@ public class TksoForward {
 
     //    @Step("Скринщот шага {testName}")
     private void makeScreenshot(String testName) {
-        SimpleDateFormat ft = new SimpleDateFormat("dd.MM.yy");
-        String sDate = ft.format(new Date());
-        try {
-            File screenshot = ((TakesScreenshot) chromeSession)
-                    .getScreenshotAs(OutputType.FILE);
-            FileUtils.copyFile(screenshot, new File("screenShots\\screenShot_" + testName + sDate + ".png"));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+            SimpleDateFormat ft = new SimpleDateFormat("dd.MM.yy");
+            String sDate = ft.format(new Date());
+            try {
+                File screenshot = ((TakesScreenshot) chromeSession)
+                        .getScreenshotAs(OutputType.FILE);
+                FileUtils.copyFile(screenshot, new File("screenShots\\screenShot_" + testName + sDate + ".png"));
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
 //        return screenshotBytes;
+    }
+
+    private boolean runningFromIntelliJ() {
+        String classPath = System.getProperty("java.class.path");
+        System.out.println("classPath = " + classPath);
+        return classPath.contains("idea_rt.jar");
     }
 
     //    @Step("{name}")

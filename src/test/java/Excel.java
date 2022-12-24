@@ -1,7 +1,10 @@
 import io.appium.java_client.windows.WindowsDriver;
 import io.qameta.allure.*;
 import org.apache.commons.io.FileUtils;
-import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
 import org.openqa.selenium.By;
 import org.openqa.selenium.OutputType;
 import org.openqa.selenium.TakesScreenshot;
@@ -17,6 +20,8 @@ import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.concurrent.TimeUnit;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 //@ExtendWith(SerenityJUnit5Extension.class)
 //@ExtendWith(SerenityRunner.class)
@@ -74,7 +79,7 @@ public class Excel {
         enterSymbol("A5", "50", stepNumStr);
         byte[] scrsht5 = allureScreenshot("После заполнения 5-й ячейки");      //
         String curSum = calcSum("A6", "A1", "A5", stepNumStr);
-        Assertions.assertEquals("150", curSum, "Incorrect sum");
+        assertEquals("150", curSum, "Incorrect sum");
         byte[] scrsht = allureScreenshot("Фотка страницы результата");      //
         makeScreenshot("Excel_");
     }
