@@ -69,18 +69,12 @@ public class Excel {
         Thread.sleep(3500);
 
         enterSymbol("A1", "10", stepNumStr);
-        byte[] scrsht1 = allureScreenshot("После заполнения 1-й ячейки");      //
         enterSymbol("A2", "20", stepNumStr);
-        byte[] scrsht2 = allureScreenshot("После заполнения 2-й ячейки");      //
         enterSymbol("A3", "30", stepNumStr);
-        byte[] scrsht3 = allureScreenshot("После заполнения 3-й ячейки");      //
         enterSymbol("A4", "40", stepNumStr);
-        byte[] scrsht4 = allureScreenshot("После заполнения 4-й ячейки");      //
         enterSymbol("A5", "50", stepNumStr);
-        byte[] scrsht5 = allureScreenshot("После заполнения 5-й ячейки");      //
         String curSum = calcSum("A6", "A1", "A5", stepNumStr);
         assertEquals("150", curSum, "Incorrect sum");
-        byte[] scrsht = allureScreenshot("Фотка страницы результата");      //
         makeScreenshot("Excel_");
     }
 
@@ -88,19 +82,22 @@ public class Excel {
     public void enterSymbol(String name, String value, String stepN) {
         stepNumStr = String.valueOf(Integer.parseInt(stepNumStr) + 1);
         WebElement elementFormulaBar = exSession.findElementByAccessibilityId("FormulaBar");
-        WebElement sellName = exSession.findElementByName(name);
-        addAct.doubleClick(sellName).build().perform();
+//        WebElement sellName = exSession.findElementByName(name);
+        WebElement cellName = wait.until(ExpectedConditions.presenceOfElementLocated(By.name(name)));
+        addAct.doubleClick(cellName).build().perform();
         elementFormulaBar.click();
         elementFormulaBar.sendKeys(value);
         System.out.println(value + " was inserted to sell " + name);
+        byte[] scrsht1 = allureScreenshot("После заполнения "+stepN+"-й ячейки");      //
+
     }
 
     @Step("{stepN}. Расчитать сумму от {start} до {finish}, сумма = {summa}")
     public String calcSum(String name, String start, String finish, String stepN) throws InterruptedException {
         stepNumStr = String.valueOf(Integer.parseInt(stepNumStr) + 1);
         WebElement elementFormulaBar = exSession.findElementByAccessibilityId("FormulaBar");
-        WebElement sellName = exSession.findElementByName(name);
-        addAct.doubleClick(sellName).build().perform();
+        WebElement cellName = exSession.findElementByName(name);
+        addAct.doubleClick(cellName).build().perform();
         elementFormulaBar.click();
         System.out.println("Before input sum formula");
 
@@ -122,6 +119,7 @@ public class Excel {
 //        System.out.println(summa + " was getText calculated in sell " + name);
 //        summa = elementFormulaBar.getText();
 //        System.out.println(summa + " get in sell formulaBar");
+        byte[] scrsht = allureScreenshot("Фотка страницы результата");      //
         return summa;
     }
 
