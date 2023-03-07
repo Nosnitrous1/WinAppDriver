@@ -81,7 +81,8 @@ public class TksoForward {
     @Feature("Ащкцфквштп testing")
     @Story("Продвижение через поисковики")
     public void forwardTest() throws InterruptedException {
-        newTab = chromeSession.findElementByName("Новая вкладка");
+//        newTab = chromeSession.findElementByName("Новая вкладка");
+        newTab = chromeSession.findElementByXPath("//Button[@Name='Новая вкладка']");
 
         List<WebElement> tabsFin = chromeSession.findElementsByXPath("//Pane/Tab/Pane/Pane/TabItem/Button[@Name='Закрыть']");
         System.out.println("NumOfTabsFin: " + tabsFin.size());
